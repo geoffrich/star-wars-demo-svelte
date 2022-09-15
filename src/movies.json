@@ -193,5 +193,35 @@
     "video": false,
     "vote_average": 7.9,
     "vote_count": 13209
+  },
+  {
+    "backdrop_path": "/c6UZKwtnuwMEWcQzyrT9lXsyVXj.jpg",
+    "genre_ids": [12, 10751, 14, 878, 10770],
+    "id": 1884,
+    "original_language": "en",
+    "original_title": "The Ewok Adventure",
+    "overview": "The Towani family civilian shuttlecraft crashes on the forest moon of Endor. The four Towani's are separated. Jermitt and Catarine, the mother and father are captured by the giant Gorax, and Mace and Cindel, the son and daughter, are missing when they are captured. The next day, the Ewok Deej is looking for his two sons when they find Cindel all alone in the shuttle (Mace and Cindel were looking for the transmitter to send a distress call), when Mace appears with his emergency blaster. Eventually, the four-year old Cindel is able to convince the teenage Mace that the Ewoks are nice. Then, the Ewoks and the Towani's go on an adventure to find the elder Towanis.",
+    "popularity": 12.316,
+    "poster_path": "https://image.tmdb.org/t/p/w185/lP7FIxojVrgWsam9efElk5ba3I5.jpg",
+    "release_date": "1984-11-25",
+    "title": "The Ewok Adventure",
+    "video": false,
+    "vote_average": 6,
+    "vote_count": 259
+  },
+  {
+    "backdrop_path": "/xdH8k2O6mpLv4szeLkQGiM1aSOC.jpg",
+    "genre_ids": [12, 10751, 10770],
+    "id": 10372,
+    "original_language": "en",
+    "original_title": "Ewoks: The Battle for Endor",
+    "overview": "The army of the Marauders, led by King Terak and the witch Charal, attack the Ewoks village, killing Cindel's family. Cindel and the Ewok Wicket escape and meet Teek in the forest, a naughty and very fast animal. Teek takes them to a house in which an old man, Noa, lives. Like Cindel, he also crashed with his Starcruiser on Endor. Together they fight Terak and Charal.",
+    "popularity": 11.719,
+    "poster_path": "https://image.tmdb.org/t/p/w185/ntgKdekb7xMKscyh2Hei706LBLf.jpg",
+    "release_date": "1985-11-24",
+    "title": "Ewoks: The Battle for Endor",
+    "video": false,
+    "vote_average": 5.3,
+    "vote_count": 197
   }
 ]

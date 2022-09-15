@@ -10,16 +10,21 @@
   let dialog;
 
   let score = movie.vote_average;
+
+  function showDetails() {
+    dialog.open();
+  }
 </script>
 
 <div class="container">
   <img src={movie.poster_path} alt="{movie.title} poster" />
   <div class="buttons">
     <slot name="buttons" />
-    <IconButton label="info" on:click={() => dialog.open()}>
+    <IconButton label="info" on:click={showDetails}>
       {@html info}
     </IconButton>
   </div>
+  <div class="release">{movie.release_date}</div>
 </div>
 <h2>
   {movie.title}
@@ -45,6 +50,8 @@
 
   .container {
     position: relative;
+    max-width: 180px;
+    margin: 0 auto;
   }
 
   .container:hover .buttons,
@@ -59,8 +66,14 @@
     left: 0.5rem;
   }
 
-  img {
-    max-width: 180px;
+  .release {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    padding: 0.3rem;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
   }
 
   .score {

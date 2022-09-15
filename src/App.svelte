@@ -20,8 +20,17 @@
 
   let sortOptions = ["release_date", "title", "vote_average"];
   let sortBy = sortOptions[0];
+  let addToStart = true;
 
-  $: sorted = movies.sort((a, b) => (a[sortBy] > b[sortBy] ? 1 : -1));
+  $: sorted = sort(sortBy);
+
+  function sort(sortBy) {
+    if (sortBy === "vote_average") {
+      return movies.sort((a, b) => (a[sortBy] < b[sortBy] ? 1 : -1));
+    } else {
+      return movies.sort((a, b) => (a[sortBy] > b[sortBy] ? 1 : -1));
+    }
+  }
 
   let filter = "";
 
@@ -38,7 +47,11 @@
    * @param id {number}
    */
   function select(id) {
-    selected.push(id);
+    if (addToStart) {
+      selected.unshift(id);
+    } else {
+      selected.push(id);
+    }
     selected = selected;
   }
 
@@ -73,44 +86,50 @@
   }
 </script>
 
-<h1>Star Wars</h1>
-
-<p>Create your own Star Wars watch order!</p>
-
-<div>
-  <label for="filter">Filter</label>
-  <input id="filter" bind:value={filter} />
-  <label for="sort">Sort by</label>
-  <select id="sort" bind:value={sortBy}>
-    {#each sortOptions as opt}
-      <option value={opt}>{opt.replace("_", " ")}</option>
-    {/each}
-  </select>
-  <button on:click={reset}>Reset</button>
-</div>
-
 <div class="layout">
-  <ul class="all-movies">
-    {#each filtered as movie (movie.id)}
-      {@const key = movie.id}
-      <li
-        animate:flip={{ duration: 300 }}
-        in:send={{ key }}
-        out:receive={{ key }}
-      >
-        <Movie {movie}>
-          <svelte:fragment slot="buttons">
-            <IconButton on:click={() => select(movie.id)} label="select"
-              >{@html plus}</IconButton
-            >
-          </svelte:fragment>
-        </Movie>
-      </li>
-    {/each}
-  </ul>
+  <div>
+    <h1>Star Wars</h1>
+
+    <p>Create your own Star Wars watch order!</p>
+
+    <div>
+      <label for="filter">Filter</label>
+      <input id="filter" bind:value={filter} />
+      <label for="sort">Sort by</label>
+      <select id="sort" bind:value={sortBy}>
+        {#each sortOptions as opt}
+          <option value={opt}>{opt.replace("_", " ")}</option>
+        {/each}
+      </select>
+      <button on:click={reset}>Reset</button>
+    </div>
+
+    <ul class="all-movies">
+      {#each filtered as movie (movie.id)}
+        {@const key = movie.id}
+        <li
+          animate:flip={{ duration: 300 }}
+          in:send={{ key }}
+          out:receive={{ key }}
+        >
+          <Movie {movie}>
+            <svelte:fragment slot="buttons">
+              <IconButton on:click={() => select(movie.id)} label="select"
+                >{@html plus}</IconButton
+              >
+            </svelte:fragment>
+          </Movie>
+        </li>
+      {/each}
+    </ul>
+  </div>
 
   <div>
     <h2>Selected</h2>
+    <label>
+      <input type="checkbox" bind:checked={addToStart} />
+      Add to start?
+    </label>
     <ul class="selected">
       {#each selected as s, idx (s)}
         {@const key = s}
@@ -142,6 +161,8 @@
             </svelte:fragment>
           </Movie>
         </li>
+      {:else}
+        <li in:fade={{ duration: 250 }}>Nothing added yet!</li>
       {/each}
     </ul>
   </div>
@@ -171,5 +192,6 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    align-items: center;
   }
 </style>
