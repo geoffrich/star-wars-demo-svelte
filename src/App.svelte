@@ -15,7 +15,9 @@
   const [send, receive] = crossfade({
     duration: 500,
     easing: quintOut,
-    fallback: (node) => fade(node, { duration: 300 }),
+    fallback: (node) => {
+      return fade(node, { duration: 300 });
+    },
   });
 
   let sortOptions = ["release_date", "title", "vote_average"];
@@ -111,6 +113,7 @@
           animate:flip={{ duration: 300 }}
           in:send={{ key }}
           out:receive={{ key }}
+          on:introend={({ target }) => (target.style = "")}
         >
           <Movie {movie}>
             <svelte:fragment slot="buttons">
