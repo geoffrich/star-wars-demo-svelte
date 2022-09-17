@@ -1,7 +1,5 @@
 <script>
-  import { flip } from "svelte/animate";
-  import { fade, crossfade } from "svelte/transition";
-  import { quintOut } from "svelte/easing";
+  import { fade } from "svelte/transition";
 
   import movies from "./movies.json";
   import trash from "./lib/icons/trash.svg?raw";
@@ -11,18 +9,14 @@
 
   import Movie from "./lib/Movie.svelte";
   import IconButton from "./lib/IconButton.svelte";
-
-  const [send, receive] = crossfade({
-    duration: 500,
-    easing: quintOut,
-    fallback: (node) => {
-      return fade(node, { duration: 300 });
-    },
-  });
+  import { pageTransition } from "./lib/transition";
 
   let sortOptions = ["release_date", "title", "vote_average"];
   let sortBy = sortOptions[0];
   let addToStart = true;
+
+  let sorted, filtered;
+  sorted = filtered = movies;
 
   $: sorted = sort(sortBy);
 
@@ -36,11 +30,13 @@
 
   let filter = "";
 
-  $: filtered = sorted.filter(
-    (m) =>
-      m.title.toLowerCase().includes(filter.toLowerCase()) &&
-      !selected.includes(m.id)
-  );
+  $: pageTransition(() => {
+    filtered = sorted.filter(
+      (m) =>
+        m.title.toLowerCase().includes(filter.toLowerCase()) &&
+        !selected.includes(m.id)
+    );
+  });
 
   /** @type {number[]} */
   let selected = [movies[0].id];
@@ -90,6 +86,14 @@
 
 <div class="layout">
   <div>
+    <p class="alert">
+      Experimental branch using the <a
+        href="https://developer.chrome.com/blog/shared-element-transitions-for-spas/"
+        >Shared Element Transitions API</a
+      >. You will need the latest Chrome with the documentTransition API flag
+      enabled in <code>chrome://flags</code>. Since the API is experimental,
+      this may break at any time.
+    </p>
     <h1>Star Wars</h1>
 
     <p>Create your own Star Wars watch order!</p>
@@ -103,22 +107,18 @@
           <option value={opt}>{opt.replace("_", " ")}</option>
         {/each}
       </select>
-      <button on:click={reset}>Reset</button>
+      <button on:click={() => pageTransition(reset)}>Reset</button>
     </div>
 
     <ul class="all-movies">
       {#each filtered as movie (movie.id)}
         {@const key = movie.id}
-        <li
-          animate:flip={{ duration: 300 }}
-          in:send={{ key }}
-          out:receive={{ key }}
-          on:introend={({ target }) => (target.style = "")}
-        >
+        <li class="movie" style:--tag="movie-{key}">
           <Movie {movie}>
             <svelte:fragment slot="buttons">
-              <IconButton on:click={() => select(movie.id)} label="select"
-                >{@html plus}</IconButton
+              <IconButton
+                on:click={() => pageTransition(() => select(movie.id))}
+                label="select">{@html plus}</IconButton
               >
             </svelte:fragment>
           </Movie>
@@ -137,26 +137,23 @@
       {#each selected as s, idx (s)}
         {@const key = s}
         {@const movie = movies.find((m) => m.id === s)}
-        <li
-          in:send={{ key }}
-          out:receive={{ key }}
-          animate:flip={{ duration: 300 }}
-        >
+        <li class="movie" style:--tag="movie-{key}">
           <Movie {movie}>
             <svelte:fragment slot="buttons">
-              <IconButton on:click={() => deselect(s)} label="remove"
-                >{@html trash}</IconButton
+              <IconButton
+                on:click={() => pageTransition(() => deselect(s))}
+                label="remove">{@html trash}</IconButton
               >
               <IconButton
                 label="move up"
-                on:click={() => moveUp(s)}
+                on:click={() => pageTransition(() => moveUp(s))}
                 disabled={idx === 0}
               >
                 {@html arrowUp}
               </IconButton>
               <IconButton
                 label="move down"
-                on:click={() => moveDown(s)}
+                on:click={() => pageTransition(() => moveDown(s))}
                 disabled={idx === selected.length - 1}
               >
                 {@html arrowDown}
@@ -172,6 +169,12 @@
 </div>
 
 <style>
+  .alert {
+    background-color: lightcoral;
+    padding: 0.5rem;
+    border-radius: 4px;
+  }
+
   ul {
     list-style: none;
     padding: 0;
@@ -196,5 +199,10 @@
     flex-direction: column;
     gap: 1rem;
     align-items: center;
+  }
+
+  .movie {
+    contain: paint;
+    page-transition-tag: var(--tag);
   }
 </style>
