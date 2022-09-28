@@ -3,7 +3,7 @@
   import Dialog from "./Dialog.svelte";
   import info from "./icons/information-circle.svg?raw";
 
-  /** @type {typeof import('../movies.json')[0]}*/
+  /** @type {typeof import('./movies.json')[0]}*/
   export let movie;
 
   /** @type {Dialog} */

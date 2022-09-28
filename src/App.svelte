@@ -3,7 +3,7 @@
   import { fade, crossfade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
 
-  import movies from "./movies.json";
+  import movieMap from "./lib/movies";
   import trash from "./lib/icons/trash.svg?raw";
   import plus from "./lib/icons/plus.svg?raw";
   import arrowUp from "./lib/icons/arrow-up.svg?raw";
@@ -11,6 +11,8 @@
 
   import Movie from "./lib/Movie.svelte";
   import IconButton from "./lib/IconButton.svelte";
+
+  const movies = Object.values(movieMap);
 
   const [send, receive] = crossfade({
     duration: 500,
@@ -136,7 +138,7 @@
     <ul class="selected">
       {#each selected as s, idx (s)}
         {@const key = s}
-        {@const movie = movies.find((m) => m.id === s)}
+        {@const movie = movieMap[s]}
         <li
           in:send={{ key }}
           out:receive={{ key }}
