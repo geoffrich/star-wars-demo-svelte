@@ -1,6 +1,4 @@
 <script>
-  import { fade } from "svelte/transition";
-
   import movies from "./movies.json";
   import trash from "./lib/icons/trash.svg?raw";
   import plus from "./lib/icons/plus.svg?raw";
@@ -88,11 +86,10 @@
   <div>
     <p class="alert">
       Experimental branch using the <a
-        href="https://developer.chrome.com/blog/shared-element-transitions-for-spas/"
-        >Shared Element Transitions API</a
-      >. You will need the latest Chrome with the documentTransition API flag
-      enabled in <code>chrome://flags</code>. Since the API is experimental,
-      this may break at any time.
+        href="https://developer.chrome.com/docs/web-platform/view-transitions/"
+        >View Transitions API</a
+      >. You will need a version of Chrome (e.g. Chrome 111 Beta) that supports
+      the API, which is currently in beta.
     </p>
     <h1>Star Wars</h1>
 
@@ -162,7 +159,7 @@
           </Movie>
         </li>
       {:else}
-        <li in:fade={{ duration: 250 }}>Nothing added yet!</li>
+        <li>Nothing added yet!</li>
       {/each}
     </ul>
   </div>
@@ -202,7 +199,7 @@
   }
 
   .movie {
-    contain: paint;
-    page-transition-tag: var(--tag);
+    contain: layout;
+    view-transition-name: var(--tag);
   }
 </style>
